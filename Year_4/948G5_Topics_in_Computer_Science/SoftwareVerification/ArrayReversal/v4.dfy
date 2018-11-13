@@ -1,27 +1,33 @@
 /**
-	Add a predicate to check the output
+	Add a main to test it
  */
-method Reverse(str: array<char>) returns (reversedStr: array<char>)
-  requires str.Length >= 0
-  ensures Reversed(str, reversedStr)
+method Reverse<T(0)>(arr: array<T>) returns (revarr: array<T>)
+  requires arr.Length >= 0
 {
 
   var i := 0;
-  reversedStr := new char[str.Length];
+  revarr := new T[arr.Length];
   
-  while (i < str.Length)
-  invariant 0 <= i <= str.Length 
+  while (i < arr.Length)
+  invariant 0 <= i <= arr.Length 
   {
-    reversedStr[i] := str[str.Length-1-i];
+    revarr[i] := arr[arr.Length-1-i];
     i:= i+1;
   }
 }
 
-predicate Reversed(str: array<char>, revStr: array<char>)
-reads str, revStr
-requires str.Length >= 0
-requires str.Length == revStr.Length
+method Main()
 {
-  forall i : int :: 0 <= i < str.Length ==> str[i] == revStr[str.Length-i-1]
+	var input := new int[5];
+	input[0],input[1],input[2],input[3],input[4] := 1,2,3,4,5;
+	var output := Reverse(input);
+	var i := 0;
+	while i < output.Length
+	invariant i <= output.Length
+	{
+		print output[i];
+		i := i + 1;
+	}
+
 }
 
