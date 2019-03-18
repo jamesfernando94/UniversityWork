@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Security Example</title>
+    </h:head>
+    <h:body>
+        <b>Use Chrome's developer tools to see the HTTP requests that are sent when clicking on links.</b>
+        <br/>
+        The following two links use the h:link JSF tag (they are not included in an h:form tag) - Check the documentation of h:link to see what HTML it renders.
+        <br/>
+        Navigate using the following two links and check the browser's address bar to see the URLs that appear.
+        <br/>
+        The outcome attribute of h:link is matched against navigation rules in faces-config.xml. Check this file to understand how navigation rules are defined.
+        <br/>
+        <h:link value="Go to a user page (with h:link)" outcome="user"/>
+        <br/>
+        <h:link value="Go to an admin page (with h:link)" outcome="admin"/>
+        
+        
+        <br/><br/><br/><br/><br/>
+        The following two links use the h:button JSF tag (they are not included in an h:form tag) - Check the documentation of h:button to see what HTML it renders.
+        <br/>
+        Navigate using the following two links and check the browser's address bar to see the URLs that appear.
+        <br/>
+        The outcome attribute of h:button is matched against navigation rules in faces-config.xml. Check this file to understand how navigation rules are defined.
+        <br/>
+        <h:button value="Go to a user page (with h:button)" outcome="user"/>
+        <br/>
+        <h:button value="Go to an admin page (with h:button)" outcome="admin"/>
+        
+        
+        <br/><br/><br/><br/><br/>
+        The following links are encapsulate in an h:form JSF tag. JSF will always use POST to submit the contents of a form. This have some implications especially when securing web pages!!
+        <h:form>
+            The following two links use the h:commandLink JSF tag (they must be included in an h:form tag or JSF will disable them!) - Check the documentation of h:commandLink to see what HTML it renders.
+            <br/>
+            <h:commandLink value="Go to a user page (with h:commandLink)" action="user"/>
+            <br/>
+            <h:commandLink value="Go to an admin page (with h:commandLink)" action="admin"/>
+            
+            
+            <br/><br/><br/><br/><br/>
+            The following two links use the h:commandButton JSF tag (they must be included in an h:form tag or JSF will disable them!) - Check the documentation of h:commandButton to see what HTML it renders.
+            <br/>
+            <h:commandButton value="Go to a user page (with h:commandLink)" action="user"/>
+            <br/>
+            <h:commandButton value="Go to an admin page (with h:commandLink)" action="admin"/>
+            <br/><br/><br/><br/><br/>
+            A quick tip for the links in a form. JSF will always use a POST method. Note that the URLs that you see in the address bar show index.xhtml even when you look at a users' or admins' page. Check Chrome's developer console to see the HTTP requests in response to your actions.
+            
+            To change that behaviour add a redirect element in the respective navigation cases in faces-config.xml. If you do so the browser will send a POST request and then it will be redirected to GET the new page.
+            <br/>
+            Not a very elegant approach so use the h:link and h:button tags when you just need to navigate without posting any form to the server.
+            
+            <br/><br/><br/><br/><br/>
+            
+            This a logout button. Ignore for now. It will be used in Part 2.
+            <h:commandButton value="Logout" action="#{loginBean.logout()}"/>
+        </h:form>
+    </h:body>
+</html>
+
