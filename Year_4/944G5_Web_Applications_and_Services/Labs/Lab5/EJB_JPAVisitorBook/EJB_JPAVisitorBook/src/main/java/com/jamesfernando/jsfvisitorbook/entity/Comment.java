@@ -4,19 +4,25 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 
+@NamedQuery(name="findAllComments", query = "SELECT C FROM Comment c")
 @Entity
 public class Comment implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     long commentID;
+    @NotNull
     String name;
     @NotNull
     String comment_str;
-
+    @NotNull
     @Temporal(javax.persistence.TemporalType.DATE)
     Date visitDate;
 
@@ -26,6 +32,9 @@ public class Comment implements Serializable {
         this.visitDate = visitDate;
     }
 
+    public Comment(){
+        
+    }
     public String getName() {
         return name;
     }

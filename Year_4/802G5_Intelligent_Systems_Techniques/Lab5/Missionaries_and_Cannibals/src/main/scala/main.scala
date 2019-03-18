@@ -14,7 +14,7 @@ object main extends App {
 	}
 
 	def successors(currentState: State): List[State] = {
-		var possibleStates = new ListBuffer[State]
+		val possibleStates = new ListBuffer[State]
 
 
 

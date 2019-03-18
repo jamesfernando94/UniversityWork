@@ -1,29 +1,34 @@
 package com.jamesfernando.jsfvisitorbook.ejb;
 
 import com.jamesfernando.jsfvisitorbook.entity.Comment;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-@Singleton
-public class CommentStore {
+@Stateless
+public class CommentStorageServiceBean implements CommentStorageService{
 
-    ArrayList<Comment> commentList;
-
-    public CommentStore() {
-        commentList = new ArrayList<>();
+    @PersistenceContext
+    EntityManager em;
+    
+    
+    public CommentStorageServiceBean() {
     }
 
-    public synchronized List<Comment> getCommentList() {
-        return commentList;
+    @Override
+    public List<Comment> getCommentList() {
+        return em.createNamedQuery("findAllComments").getResultList();
     }
     
-    public synchronized void insertComment(String name, String comment_str, Date visitDate) {
+    @Override
+    public void insertComment(String name, String comment_str, Date visitDate) {
         Comment cmnt = new Comment(name, comment_str, visitDate);
-        commentList.add(cmnt);
+        
+        em.persist(cmnt);
         System.out.println("Inserted the following comment in the store:");
         System.out.println("name: " + name);
         System.out.println("date: " + visitDate);

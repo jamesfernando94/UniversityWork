@@ -1,12 +1,14 @@
 package com.jamesfernando.jsfvisitorbook.jsf;
 
 import com.jamesfernando.jsfvisitorbook.entity.Comment;
-import com.jamesfernando.jsfvisitorbook.ejb.CommentStore;
+import com.jamesfernando.jsfvisitorbook.ejb.CommentStorageService;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Named
 @RequestScoped
@@ -16,8 +18,9 @@ public class VisitorBean {
     String comment_str;
     Date visitDate;
     
+    
     @EJB
-    CommentStore store;
+    CommentStorageService store;
     
     public VisitorBean() {
     }
