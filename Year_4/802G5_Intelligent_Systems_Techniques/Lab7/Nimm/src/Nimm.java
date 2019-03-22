@@ -17,14 +17,15 @@ import java.util.*;
  * Whoever can make the last pick wins, such that the pile is empty, or the opponent is stuck and cannot move anymore. 
  */
 public class Nimm {
-    static int pile = 0; // number of tokens in the pile
-    static int count = 0; // current number of tokens in the pile
-    static int bound = 0; // the max any player can take
-    static int[] humanHistory; // previous turns of the human player
-    static int[] AIHistory; // previous turns of the AI player
+    private static int pile = 0; // number of tokens in the pile
+    private static int count = 0; // current number of tokens in the pile
+    private static int bound = 0; // the max any player can take
+    private static int[] humanHistory; // previous turns of the human player
+    private static int[] AIHistory; // previous turns of the AI player
     static int[] mmAIhistory; // array for storing simulated takes (use this in Minimax)
     static int[] mmHUMANhistory; // array for storing simulated takes (use this in Minimax)
-    static Random r = new Random(); // this one just picks a random number - we can do better than this!
+    private static Random r = new Random(); // this one just picks a random number - we can do better than this!
+
     
     private static int getAIMove() {
        // try a value
@@ -42,7 +43,7 @@ public class Nimm {
        // crude and simple utility method for cloning an array
        // you cannot use the assignment operator between arrays to create copies (= just creates references to the first array)
        // to get a true, separate instance, we need to copy over the data
-       int dest[] = new int[source.length];
+        int[] dest = new int[source.length];
        int temp;
         for(int i = 0; i < source.length; i++) {
               temp = source[i];
@@ -62,8 +63,7 @@ public class Nimm {
     private static String getUserCommand() {
         System.out.print("Please enter the number of tokens in the pile, or 'q' to quit: ");
         Scanner scanner = new Scanner(System.in);
-        String s = scanner.next();
-        return s;
+        return scanner.next();
     }
     
     private static void processUserCommand(String c) {
@@ -75,8 +75,8 @@ public class Nimm {
             humanHistory = new int[bound+1];
             AIHistory = new int[bound+1];
             System.out.println();
-            System.out.println("The pile has " +count+ " tokens.");
-            System.out.print("The maximum you may take in any turn is "+bound);
+            System.out.println("The pile has " + count + " tokens.");
+            System.out.print("The maximum you may take in any turn is " + bound);
         } catch(Exception e) {
             System.out.print("Good Bye!");
             System.exit(0);
@@ -162,6 +162,16 @@ public class Nimm {
         processUserCommand(getUserCommand());
         play(humanName);
     }
+
+    public NimmGameTree generateGameTree(){
+        NimmGameNode root = new NimmGameNode(count);
+        NimmGameTree tree = new NimmGameTree(root);
+
+
+
+        return tree;
+    }
+
       
     public static void main(String[] args) {
         Scanner humanInput = new Scanner(System.in);
