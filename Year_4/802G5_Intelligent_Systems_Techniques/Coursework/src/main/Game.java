@@ -19,4 +19,42 @@ public class Game {
 			}
 		}
 	}
+
+	public ArrayList<Move> findAllPossibleMoves() {
+		ArrayList<Move> possibleMoves = new ArrayList<>();
+		for (Draught draught : draughtArrayList) {
+			possibleMoves.addAll(findPossibleMoves(draught));
+		}
+		return possibleMoves;
+	}
+
+	public ArrayList<Move> findPossibleMoves(Draught draught) {
+		ArrayList<Move> possibleMoves = new ArrayList<>();
+
+		for (Move move : draught.listPossibleMoves()) {
+			if (isMoveBlocked(move)) {
+				Move captureMove = new Move(
+					move.draught,
+					move.newXPosition + move.xPositionMovement(),
+					move.newYPosition + move.yPositionMovement()
+				);
+				if (!isMoveBlocked(captureMove)){
+					possibleMoves.add(captureMove);
+				}
+			}else{possibleMoves.add(move);}
+		}
+
+		return possibleMoves;
+	}
+
+	public boolean isMoveBlocked(Move move) {
+		for (Draught draught : draughtArrayList) {
+			if (draught.xPosition == move.newXPosition && draught.yPosition == move.newYPosition) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 }
