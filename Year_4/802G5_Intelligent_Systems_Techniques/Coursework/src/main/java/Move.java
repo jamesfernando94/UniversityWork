@@ -1,5 +1,3 @@
-package main;
-
 public class Move {
 	Draught draught;
 	int newXPosition;

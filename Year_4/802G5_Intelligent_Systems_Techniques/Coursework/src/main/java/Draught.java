@@ -1,5 +1,3 @@
-package main;
-
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -10,7 +8,8 @@ public class Draught {
 	boolean crowned;
 	Colour colour;
 	boolean taken;
-	enum Colour {LIGHT, DARK}
+	boolean selected;
+
 
 	public Draught(int xPosition, int yPosition, Colour colour)
 	{

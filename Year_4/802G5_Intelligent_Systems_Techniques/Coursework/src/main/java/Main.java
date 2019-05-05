@@ -1,5 +1,4 @@
-package main;
-
+import com.sun.istack.internal.NotNull;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -12,6 +11,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.awt.event.MouseEvent;
+
 public class Main extends Application {
 
 	private static final int BOARDSIZE = 8;
@@ -23,17 +24,26 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		game = new Game();
 		game.setUpNewGame();
-		GridPane root = setupRoot();
-		root.setBackground(new Background(new BackgroundFill(Color.LIGHTSTEELBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-		GridPane board = displayDraughtsOnBoard(generateBoard());
-		root.add(board, 0, 0);
-		primaryStage.setScene(new Scene(root, 600, 550));
+		primaryStage.setScene(new Scene(
+			generateDisplay(setupRoot()),
+			600,
+			550)
+		);
 		primaryStage.show();
 	}
 
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	public GridPane generateDisplay(GridPane root){
+		GridPane board = generateBoard();
+		board = displayDraughtsOnBoard(board);
+
+		root.add(board, 0, 0);
+
+		return root;
 	}
 
 	public GridPane generateBoard() {
@@ -59,27 +69,37 @@ public class Main extends Application {
 		return board;
 	}
 
+	public GridPane displayPossibleMoves(GridPane board,Draught draught){
+
+		return board;
+	}
+
 	public GridPane displayDraughtsOnBoard(GridPane board) {
 		for (Draught draught : game.draughtArrayList) {
 			Node draughtVisual = generateDraughtVisual(draught);
-			board.add(draughtVisual, draught.xPosition,draught.yPosition);
+			board.add(draughtVisual, draught.xPosition, draught.yPosition);
 			GridPane.setHalignment(draughtVisual, HPos.CENTER);
 			GridPane.setValignment(draughtVisual, VPos.CENTER);
 		}
 		return board;
 	}
 
-	public Node generateDraughtVisual(Draught draught) throws NotImplementedException {
-		Color color;
-		if (draught.colour == Draught.Colour.DARK) {
-			color = Color.RED;
-		} else if (draught.colour == Draught.Colour.LIGHT) {
-			color = Color.WHITE;
-		} else {
-			throw new NotImplementedException();
+	public Circle generateDraughtVisual(Draught draught){
+		Circle draughtVisual = new Circle(20);
+		if (draught.colour == Colour.DARK) {
+			draughtVisual.setFill(Color.RED);
+		} else if (draught.colour == Colour.LIGHT) {
+			draughtVisual.setFill(Color.WHITE);
+		}
+		if (game.selectedDraught == null && game.draughtsWithPossibleMoves().contains(draught)){
+			// If draught has possible moves
+			draughtVisual.setStroke(Color.YELLOW);
+		}else if (draught.equals(game.selectedDraught)){
+			draughtVisual.setStroke(Color.BLUE);
 		}
 
-		return new Circle(20, color);
+
+		return draughtVisual;
 	}
 
 	public GridPane setupRoot() {
@@ -97,6 +117,8 @@ public class Main extends Application {
 		RowConstraints row0 = new RowConstraints();
 		row0.setPrefHeight(500);
 		root.getRowConstraints().add(row0);
+		root.setBackground(new Background(new BackgroundFill(Color.LIGHTSTEELBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+
 
 
 		return root;
