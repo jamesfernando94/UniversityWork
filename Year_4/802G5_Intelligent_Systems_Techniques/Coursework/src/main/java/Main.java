@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class Main extends Application {
 
 	private static final int BOARDSIZE = 8;
@@ -18,7 +20,7 @@ public class Main extends Application {
 	private Stage primaryStage;
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		game = new Game();
 		game.setUpNewGame();
 		this.primaryStage = primaryStage;
@@ -33,7 +35,9 @@ public class Main extends Application {
 	public GridPane generateDisplay(GridPane root){
 		GridPane board = generateBoard();
 		board = displayDraughtsOnBoard(board);
-
+		if (game.selectedDraught != null) {
+			board = displayPossibleMoves(board, game.selectedDraught);
+		}
 		root.add(board, 0, 0);
 
 		return root;
@@ -63,8 +67,22 @@ public class Main extends Application {
 	}
 
 	public GridPane displayPossibleMoves(GridPane board,Draught draught){
-
+		ArrayList<Move> moves = game.findPossibleMoves(draught);
+		for (Move move : moves){
+			Circle moveVisual = generateMoveVisual(move);
+			board.add(moveVisual, move.newXPosition, move.newYPosition);
+			GridPane.setHalignment(moveVisual, HPos.CENTER);
+			GridPane.setValignment(moveVisual, VPos.CENTER);
+		}
 		return board;
+	}
+
+	public Circle generateMoveVisual(Move move){
+		Circle moveVisual = new Circle(20);
+		moveVisual.setFill(Color.TRANSPARENT);
+		moveVisual.setStrokeWidth(2);
+		moveVisual.setStroke(Color.WHITE);
+		return moveVisual;
 	}
 
 	public GridPane displayDraughtsOnBoard(GridPane board) {
@@ -84,15 +102,19 @@ public class Main extends Application {
 		} else if (draught.colour == Colour.LIGHT) {
 			draughtVisual.setFill(Color.WHITE);
 		}
-		if (game.selectedDraught == null && game.draughtsWithPossibleMoves().contains(draught)){
+		if (game.draughtsWithPossibleMoves().contains(draught)) {
+
 			// If draught has possible moves
-			draughtVisual.setStroke(Color.YELLOW);
-		}else if (draught.equals(game.selectedDraught)){
+			draughtVisual.setOnMouseClicked(event -> selectDraught(draught));
+			if (game.selectedDraught == null) {
+				draughtVisual.setStroke(Color.YELLOW);
+			}
+		}
+		if (draught.equals(game.selectedDraught)) {
 			draughtVisual.setStroke(Color.CYAN);
 		}
 		draughtVisual.setStrokeWidth(2);
 
-		draughtVisual.setOnMouseClicked(event -> selectDraught(draught));
 
 		return draughtVisual;
 	}
@@ -120,8 +142,11 @@ public class Main extends Application {
 	}
 
 	public void selectDraught(Draught draught){
-
-		game.selectedDraught = draught;
+		if (draught.equals(game.selectedDraught)) {
+			game.selectedDraught = null;
+		} else {
+			game.selectedDraught = draught;
+		}
 		updateDisplay();
 
 	}
