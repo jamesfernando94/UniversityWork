@@ -1,4 +1,3 @@
-import com.sun.istack.internal.NotNull;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -9,9 +8,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.awt.event.MouseEvent;
 
 public class Main extends Application {
 
@@ -19,17 +15,14 @@ public class Main extends Application {
 	private static final Background WHITEBACKGROUND = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
 	private static final Background BLACKBACKGROUND = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
 	private Game game;
+	private Stage primaryStage;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		game = new Game();
 		game.setUpNewGame();
-		primaryStage.setScene(new Scene(
-			generateDisplay(setupRoot()),
-			600,
-			550)
-		);
-		primaryStage.show();
+		this.primaryStage = primaryStage;
+		updateDisplay();
 	}
 
 
@@ -95,9 +88,11 @@ public class Main extends Application {
 			// If draught has possible moves
 			draughtVisual.setStroke(Color.YELLOW);
 		}else if (draught.equals(game.selectedDraught)){
-			draughtVisual.setStroke(Color.BLUE);
+			draughtVisual.setStroke(Color.CYAN);
 		}
+		draughtVisual.setStrokeWidth(2);
 
+		draughtVisual.setOnMouseClicked(event -> selectDraught(draught));
 
 		return draughtVisual;
 	}
@@ -124,7 +119,19 @@ public class Main extends Application {
 		return root;
 	}
 
-	public void selectDraught(){
+	public void selectDraught(Draught draught){
 
+		game.selectedDraught = draught;
+		updateDisplay();
+
+	}
+
+	private void updateDisplay() {
+		primaryStage.setScene(new Scene(
+			generateDisplay(setupRoot()),
+			600,
+			550)
+		);
+		primaryStage.show();
 	}
 }
