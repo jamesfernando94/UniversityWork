@@ -1,3 +1,7 @@
+package game;
+
+import moves.Move;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -6,6 +10,30 @@ public class Game {
 	ArrayList<Draught> draughtArrayList;
 	Colour currentTurn;
 	Draught selectedDraught;
+
+	public ArrayList<Draught> getDraughtArrayList() {
+		return draughtArrayList;
+	}
+
+	public void setDraughtArrayList(ArrayList<Draught> draughtArrayList) {
+		this.draughtArrayList = draughtArrayList;
+	}
+
+	public Colour getCurrentTurn() {
+		return currentTurn;
+	}
+
+	public void setCurrentTurn(Colour currentTurn) {
+		this.currentTurn = currentTurn;
+	}
+
+	public Draught getSelectedDraught() {
+		return selectedDraught;
+	}
+
+	public void setSelectedDraught(Draught selectedDraught) {
+		this.selectedDraught = selectedDraught;
+	}
 
 	public void setUpNewGame() {
 		draughtArrayList = new ArrayList<>();
@@ -40,14 +68,14 @@ public class Game {
 			if (isMoveBlocked(move)) {
 				if (draughtArrayList.
 					stream()
-					.anyMatch(draught1 -> draught1.xPosition == move.newXPosition
-						&& draught1.yPosition == move.newYPosition
+					.anyMatch(draught1 -> draught1.xPosition == move.getNewXPosition()
+						&& draught1.yPosition == move.getNewYPosition()
 						&& draught.colour != draught1.colour)
 				) {
 					Move captureMove = new Move(
-						move.draught,
-						move.newXPosition + move.xPositionMovement(),
-						move.newYPosition + move.yPositionMovement()
+						move.getDraught(),
+						move.getNewXPosition() + move.xPositionMovement(),
+						move.getNewYPosition() + move.yPositionMovement()
 					);
 					if (!isMoveBlocked(captureMove) && captureMove.moveInBounds()) {
 						possibleMoves.add(captureMove);
@@ -61,7 +89,7 @@ public class Game {
 
 	public boolean isMoveBlocked(Move move) {
 		for (Draught draught : draughtArrayList) {
-			if (draught.xPosition == move.newXPosition && draught.yPosition == move.newYPosition) {
+			if (draught.xPosition == move.getNewXPosition() && draught.yPosition == move.getNewYPosition()) {
 				return true;
 			}
 		}
@@ -71,14 +99,14 @@ public class Game {
 	public ArrayList<Draught> draughtsWithPossibleMoves() {
 		return findAllPossibleMoves()
 			.stream()
-			.map(move -> move.draught)
+			.map(Move::getDraught)
 			.distinct()
 			.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	public void selectMove(Move move){
-		move.draught.xPosition = move.newXPosition;
-		move.draught.yPosition = move.newYPosition;
+		move.getDraught().setxPosition(move.getNewXPosition());
+		move.getDraught().setyPosition(move.getNewYPosition());
 		if (currentTurn == Colour.DARK){
 			currentTurn = Colour.LIGHT;
 		}else{

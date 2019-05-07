@@ -8,6 +8,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import game.Colour;
+import game.Draught;
+import game.Game;
+import moves.Move;
 
 import java.util.ArrayList;
 
@@ -35,8 +39,8 @@ public class Main extends Application {
 	public GridPane generateDisplay(GridPane root){
 		GridPane board = generateBoard();
 		board = displayDraughtsOnBoard(board);
-		if (game.selectedDraught != null) {
-			board = displayPossibleMoves(board, game.selectedDraught);
+		if (game.getSelectedDraught() != null) {
+			board = displayPossibleMoves(board, game.getSelectedDraught());
 		}
 		root.add(board, 0, 0);
 
@@ -66,11 +70,11 @@ public class Main extends Application {
 		return board;
 	}
 
-	public GridPane displayPossibleMoves(GridPane board,Draught draught){
+	public GridPane displayPossibleMoves(GridPane board, Draught draught){
 		ArrayList<Move> moves = game.findPossibleMoves(draught);
 		for (Move move : moves){
 			Circle moveVisual = generateMoveVisual(move);
-			board.add(moveVisual, move.newXPosition, move.newYPosition);
+			board.add(moveVisual, move.getNewXPosition(), move.getNewYPosition());
 			GridPane.setHalignment(moveVisual, HPos.CENTER);
 			GridPane.setValignment(moveVisual, VPos.CENTER);
 		}
@@ -87,9 +91,9 @@ public class Main extends Application {
 	}
 
 	public GridPane displayDraughtsOnBoard(GridPane board) {
-		for (Draught draught : game.draughtArrayList) {
+		for (Draught draught : game.getDraughtArrayList()) {
 			Node draughtVisual = generateDraughtVisual(draught);
-			board.add(draughtVisual, draught.xPosition, draught.yPosition);
+			board.add(draughtVisual, draught.getxPosition(), draught.getyPosition());
 			GridPane.setHalignment(draughtVisual, HPos.CENTER);
 			GridPane.setValignment(draughtVisual, VPos.CENTER);
 		}
@@ -98,20 +102,20 @@ public class Main extends Application {
 
 	public Circle generateDraughtVisual(Draught draught){
 		Circle draughtVisual = new Circle(20);
-		if (draught.colour == Colour.DARK) {
+		if (draught.getColour() == Colour.DARK) {
 			draughtVisual.setFill(Color.RED);
-		} else if (draught.colour == Colour.LIGHT) {
+		} else if (draught.getColour() == Colour.LIGHT) {
 			draughtVisual.setFill(Color.WHITE);
 		}
 		if (game.draughtsWithPossibleMoves().contains(draught)) {
 
 			// If draught has possible moves
 			draughtVisual.setOnMouseClicked(event -> selectDraught(draught));
-			if (game.selectedDraught == null) {
+			if (game.getSelectedDraught() == null) {
 				draughtVisual.setStroke(Color.YELLOW);
 			}
 		}
-		if (draught.equals(game.selectedDraught)) {
+		if (draught.equals(game.getSelectedDraught())) {
 			draughtVisual.setStroke(Color.CYAN);
 		}
 		draughtVisual.setStrokeWidth(2);
@@ -148,10 +152,10 @@ public class Main extends Application {
 	}
 
 	public void selectDraught(Draught draught){
-		if (draught.equals(game.selectedDraught)) {
-			game.selectedDraught = null;
+		if (draught.equals(game.getSelectedDraught())) {
+			game.setSelectedDraught(null);
 		} else {
-			game.selectedDraught = draught;
+			game.setSelectedDraught(draught);
 		}
 		updateDisplay();
 
