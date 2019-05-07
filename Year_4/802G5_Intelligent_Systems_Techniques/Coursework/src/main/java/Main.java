@@ -82,6 +82,7 @@ public class Main extends Application {
 		moveVisual.setFill(Color.TRANSPARENT);
 		moveVisual.setStrokeWidth(2);
 		moveVisual.setStroke(Color.WHITE);
+		moveVisual.setOnMouseClicked(event -> selectMove(move));
 		return moveVisual;
 	}
 
@@ -139,6 +140,11 @@ public class Main extends Application {
 
 
 		return root;
+	}
+
+	public void selectMove(Move move){
+		game.selectMove(move);
+		updateDisplay();
 	}
 
 	public void selectDraught(Draught draught){

@@ -76,5 +76,15 @@ public class Game {
 			.collect(Collectors.toCollection(ArrayList::new));
 	}
 
+	public void selectMove(Move move){
+		move.draught.xPosition = move.newXPosition;
+		move.draught.yPosition = move.newYPosition;
+		if (currentTurn == Colour.DARK){
+			currentTurn = Colour.LIGHT;
+		}else{
+			currentTurn = Colour.DARK;
+		}
+		selectedDraught = null;
+	}
 
 }
