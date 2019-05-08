@@ -1,13 +1,15 @@
+import ai.AI;
 import game.Colour;
 import game.Draught;
 import game.Game;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,11 +25,14 @@ public class Main extends Application {
 	private static final Background BLACKBACKGROUND = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
 	private Game game;
 	private Stage primaryStage;
+	private AI ai;
+
 
 	@Override
 	public void start(Stage primaryStage) {
 		game = new Game();
 		game.setUpNewGame();
+		ai = new AI(50, Colour.LIGHT);
 		this.primaryStage = primaryStage;
 		updateDisplay();
 	}
@@ -44,8 +49,31 @@ public class Main extends Application {
 			board = displayPossibleMoves(board, game.getSelectedDraught());
 		}
 		root.add(board, 0, 0);
-
+		VBox controlPanel = generateControlPanel();
+		root.add(controlPanel, 1, 0);
 		return root;
+	}
+
+	public VBox generateControlPanel() {
+
+		VBox controlPanel = new VBox();
+		HBox aiDifficulty = new HBox();
+		Label aiDifficultyLabel = new Label("AI Difficulty Level (0-99): ");
+		TextField aiDifficultyTextField = new TextField(String.format("%d",ai.getDifficulty()));
+		aiDifficulty.getChildren().addAll(aiDifficultyLabel, aiDifficultyTextField);
+		controlPanel.getChildren().add(aiDifficulty);
+
+		Button updateValues = new Button("Update");
+		updateValues.setOnMouseClicked(event -> {
+			String str = aiDifficultyTextField.getText();
+			int temp = Integer.parseInt(str);
+			ai.setDifficulty(temp);
+			updateDisplay();
+		});
+		controlPanel.getChildren().add(updateValues);
+		controlPanel.setAlignment(Pos.CENTER);
+		controlPanel.setSpacing(10);
+		return controlPanel;
 	}
 
 	public GridPane generateBoard() {
@@ -102,6 +130,8 @@ public class Main extends Application {
 	}
 
 	public StackPane generateDraughtVisual(Draught draught){
+		StackPane rtnPane = new StackPane();
+
 		Circle draughtVisual = new Circle(20);
 		if (draught.getColour() == Colour.DARK) {
 			draughtVisual.setFill(Color.RED);
@@ -112,7 +142,7 @@ public class Main extends Application {
 		if (game.draughtsWithPossibleMoves().contains(draught)) {
 
 			// If draught has possible moves
-			draughtVisual.setOnMouseClicked(event -> selectDraught(draught));
+			rtnPane.setOnMouseClicked(event -> selectDraught(draught));
 			if (game.getSelectedDraught() == null) {
 				draughtVisual.setStroke(Color.YELLOW);
 			}
@@ -121,7 +151,6 @@ public class Main extends Application {
 			draughtVisual.setStroke(Color.CYAN);
 		}
 		draughtVisual.setStrokeWidth(2);
-		StackPane rtnPane = new StackPane();
 		rtnPane.getChildren().add(draughtVisual);
 		if (draught.isCrowned()){
 			Circle crownVisual = new Circle(10);
@@ -143,7 +172,7 @@ public class Main extends Application {
 		ColumnConstraints col0 = new ColumnConstraints();
 		col0.setPrefWidth(500);
 		ColumnConstraints col1 = new ColumnConstraints();
-
+		col1.setPrefWidth(400);
 		root.getColumnConstraints().addAll(col0, col1);
 
 		RowConstraints row0 = new RowConstraints();
@@ -182,7 +211,7 @@ public class Main extends Application {
 	private void updateDisplay() {
 		primaryStage.setScene(new Scene(
 			generateDisplay(setupRoot()),
-			600,
+			900,
 			550)
 		);
 		primaryStage.show();
