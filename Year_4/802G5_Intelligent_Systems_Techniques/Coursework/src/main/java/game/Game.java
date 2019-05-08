@@ -1,15 +1,18 @@
 package game;
 
+import moves.CapturingMove;
 import moves.Move;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Game {
 	ArrayList<Draught> draughtArrayList;
 	Colour currentTurn;
 	Draught selectedDraught;
+	boolean isCurrentMultiStepMove;
 
 	public ArrayList<Draught> getDraughtArrayList() {
 		return draughtArrayList;
@@ -49,16 +52,36 @@ public class Game {
 			}
 		}
 		currentTurn = Colour.DARK;
+		isCurrentMultiStepMove = false;
 	}
 
 	public ArrayList<Move> findAllPossibleMoves() {
-		return draughtArrayList
+		if (isCurrentMultiStepMove) {
+
+			return findPossibleMoves(selectedDraught)
+				.stream()
+				.filter(move -> move instanceof CapturingMove)
+				.collect(Collectors.toCollection(ArrayList::new));
+		}
+
+		ArrayList<Move> moveList = draughtArrayList
 			.stream()
 			.filter(draught -> draught.colour == currentTurn)
 			.map(this::findPossibleMoves)
 			.flatMap(Collection::stream)
 			.collect(Collectors.toCollection(ArrayList::new));
 
+		return removeNonCapturingMovesIfCapturingMoveExists(moveList);
+
+	}
+
+	public ArrayList<Move> removeNonCapturingMovesIfCapturingMoveExists(ArrayList<Move> moveList) {
+		ArrayList<Move> captureMoveList = moveList
+			.stream()
+			.filter(move -> move instanceof CapturingMove)
+			.collect(Collectors.toCollection(ArrayList::new));
+
+		return !captureMoveList.isEmpty() ? captureMoveList : moveList;
 	}
 
 	public ArrayList<Move> findPossibleMoves(Draught draught) {
@@ -66,16 +89,18 @@ public class Game {
 
 		for (Move move : draught.listPossibleMoves()) {
 			if (isMoveBlocked(move)) {
-				if (draughtArrayList.
+				Optional<Draught> capturedDraught = draughtArrayList.
 					stream()
-					.anyMatch(draught1 -> draught1.xPosition == move.getNewXPosition()
+					.filter(draught1 -> draught1.xPosition == move.getNewXPosition()
 						&& draught1.yPosition == move.getNewYPosition()
 						&& draught.colour != draught1.colour)
-				) {
-					Move captureMove = new Move(
+					.findFirst();
+				if (capturedDraught.isPresent()) {
+					Move captureMove = new CapturingMove(
 						move.getDraught(),
 						move.getNewXPosition() + move.xPositionMovement(),
-						move.getNewYPosition() + move.yPositionMovement()
+						move.getNewYPosition() + move.yPositionMovement(),
+						capturedDraught.get()
 					);
 					if (!isMoveBlocked(captureMove) && captureMove.moveInBounds()) {
 						possibleMoves.add(captureMove);
@@ -84,7 +109,7 @@ public class Game {
 			}else{possibleMoves.add(move);}
 		}
 
-		return possibleMoves;
+		return removeNonCapturingMovesIfCapturingMoveExists(possibleMoves);
 	}
 
 	public boolean isMoveBlocked(Move move) {
@@ -107,12 +132,32 @@ public class Game {
 	public void selectMove(Move move){
 		move.getDraught().setxPosition(move.getNewXPosition());
 		move.getDraught().setyPosition(move.getNewYPosition());
+		if (move instanceof CapturingMove) {
+			draughtArrayList.remove(((CapturingMove) move).getCapturedDraught());
+			ArrayList<Move> moves = findPossibleMoves(move.getDraught());
+			if (moves.stream().anyMatch(move1 -> move1 instanceof CapturingMove)) {
+				if (!move.getDraught().isDraughtOnKingsRow() || move.getDraught().isCrowned()) {
+					selectedDraught = move.getDraught();
+					isCurrentMultiStepMove = true;
+					return;
+				}
+			}
+
+		}
+		move.getDraught().crownDraughtIfPossible();
+
 		if (currentTurn == Colour.DARK){
 			currentTurn = Colour.LIGHT;
 		}else{
 			currentTurn = Colour.DARK;
 		}
 		selectedDraught = null;
+		isCurrentMultiStepMove = false;
+	}
+
+
+	public boolean isCurrentMultiStepMove() {
+		return isCurrentMultiStepMove;
 	}
 
 }

@@ -87,7 +87,14 @@ public class Draught {
 		return possibleMoves;
 	}
 
+	public void crownDraughtIfPossible() {
+		if (!crowned) {
+			crowned = isDraughtOnKingsRow();
+		}
+	}
 
 
-
+	public boolean isDraughtOnKingsRow() {
+		return colour.equals(Colour.LIGHT) ? yPosition == 0 : yPosition == 7;
+	}
 }

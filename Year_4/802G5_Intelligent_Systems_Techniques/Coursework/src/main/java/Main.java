@@ -1,16 +1,17 @@
+import game.Colour;
+import game.Draught;
+import game.Game;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import game.Colour;
-import game.Draught;
-import game.Game;
 import moves.Move;
 
 import java.util.ArrayList;
@@ -100,13 +101,14 @@ public class Main extends Application {
 		return board;
 	}
 
-	public Circle generateDraughtVisual(Draught draught){
+	public StackPane generateDraughtVisual(Draught draught){
 		Circle draughtVisual = new Circle(20);
 		if (draught.getColour() == Colour.DARK) {
 			draughtVisual.setFill(Color.RED);
 		} else if (draught.getColour() == Colour.LIGHT) {
 			draughtVisual.setFill(Color.WHITE);
 		}
+
 		if (game.draughtsWithPossibleMoves().contains(draught)) {
 
 			// If draught has possible moves
@@ -119,9 +121,17 @@ public class Main extends Application {
 			draughtVisual.setStroke(Color.CYAN);
 		}
 		draughtVisual.setStrokeWidth(2);
+		StackPane rtnPane = new StackPane();
+		rtnPane.getChildren().add(draughtVisual);
+		if (draught.isCrowned()){
+			Circle crownVisual = new Circle(10);
+			crownVisual.setFill(Color.TRANSPARENT);
+			crownVisual.setStroke(Color.BLACK);
+			crownVisual.setStrokeWidth(2);
+			rtnPane.getChildren().add(crownVisual);
+		}
 
-
-		return draughtVisual;
+		return rtnPane;
 	}
 
 	public GridPane setupRoot() {
@@ -142,7 +152,6 @@ public class Main extends Application {
 		root.setBackground(new Background(new BackgroundFill(Color.LIGHTSTEELBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
 
-
 		return root;
 	}
 
@@ -152,10 +161,19 @@ public class Main extends Application {
 	}
 
 	public void selectDraught(Draught draught){
-		if (draught.equals(game.getSelectedDraught())) {
-			game.setSelectedDraught(null);
+		if (!game.isCurrentMultiStepMove()) {
+			if (draught.equals(game.getSelectedDraught())) {
+
+				game.setSelectedDraught(null);
+			} else {
+				game.setSelectedDraught(draught);
+			}
 		} else {
-			game.setSelectedDraught(draught);
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Unable to complete move");
+			alert.setHeaderText("Unable to complete move");
+			alert.setContentText("Is it not possible to select any other draught therefore you must complete the move with the selected tile");
+			alert.showAndWait();
 		}
 		updateDisplay();
 

@@ -25,8 +25,9 @@ public class CapturingMove extends Move {
 		this.possibleFollowingMoves = possibleFollowingMoves;
 	}
 
-	public CapturingMove(Draught draught, int newXPosition, int newYPosition) {
+	public CapturingMove(Draught draught, int newXPosition, int newYPosition, Draught capturedDraught) {
 		super(draught, newXPosition, newYPosition);
+		this.capturedDraught = capturedDraught;
 	}
 
 
