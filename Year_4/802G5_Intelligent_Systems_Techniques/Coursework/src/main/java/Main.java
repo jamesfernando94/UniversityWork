@@ -16,6 +16,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import moves.Move;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -82,6 +83,16 @@ public class Main extends Application {
 		});
 
 		controlPanel.getChildren().add(competeAIMove);
+
+		Button rules = new Button("Rules");
+		rules.setOnMouseClicked(event -> {
+			try {
+				java.awt.Desktop.getDesktop().browse(java.net.URI.create("http://www.indepthinfo.com/checkers/play.shtml"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		controlPanel.getChildren().add(rules);
 		controlPanel.setAlignment(Pos.CENTER);
 		controlPanel.setSpacing(10);
 		return controlPanel;

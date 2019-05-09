@@ -32,18 +32,9 @@ public class Draught implements Cloneable{
 		return crowned;
 	}
 
-	public void setCrowned(boolean crowned) {
-		this.crowned = crowned;
-	}
-
 	public Colour getColour() {
 		return colour;
 	}
-
-	public void setColour(Colour colour) {
-		this.colour = colour;
-	}
-
 
 
 	public Draught(Draught draught) {

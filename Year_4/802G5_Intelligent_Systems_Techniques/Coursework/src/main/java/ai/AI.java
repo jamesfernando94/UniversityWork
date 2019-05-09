@@ -7,7 +7,6 @@ import javafx.util.Pair;
 import moves.Move;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class AI {
@@ -15,7 +14,6 @@ public class AI {
 
 	int difficulty;
 	Colour colour;
-	private Random random = new Random();
 
 	public int getDifficulty() {
 		return difficulty;
@@ -27,10 +25,6 @@ public class AI {
 
 	public Colour getColour() {
 		return colour;
-	}
-
-	public void setColour(Colour colour) {
-		this.colour = colour;
 	}
 
 	public AI(int difficulty, Colour colour){
@@ -50,7 +44,7 @@ public class AI {
 
 		for (Move move : game.findAllPossibleMoves())
 		{
-			Game futureGame = game.successorFunction(move);
+			Game futureGame = game.successor(move);
 			evaluatedMoves.add(new Pair<>(minimax(futureGame, difficulty, false), move));
 		}
 
@@ -64,7 +58,7 @@ public class AI {
 		}
 		if (maxPlayer){
 			int bestVal = Integer.MIN_VALUE;
-			ArrayList<Game> children = gameBoard.findAllPossibleMoves().stream().map(gameBoard::successorFunction).collect(Collectors.toCollection(ArrayList::new));
+			ArrayList<Game> children = gameBoard.findAllPossibleMoves().stream().map(gameBoard::successor).collect(Collectors.toCollection(ArrayList::new));
 			for (Game game : children){
 				int evaluation = minimax(game, depth-1, false);
 				bestVal = Math.max(bestVal, evaluation);
@@ -72,7 +66,7 @@ public class AI {
 			return bestVal;
 		}else{
 			int bestVal = Integer.MAX_VALUE;
-			ArrayList<Game> children = gameBoard.findAllPossibleMoves().stream().map(gameBoard::successorFunction).collect(Collectors.toCollection(ArrayList::new));
+			ArrayList<Game> children = gameBoard.findAllPossibleMoves().stream().map(gameBoard::successor).collect(Collectors.toCollection(ArrayList::new));
 			for (Game game: children){
 				int evaluation = minimax(game, depth-1, true);
 				bestVal = Math.min(bestVal, evaluation);

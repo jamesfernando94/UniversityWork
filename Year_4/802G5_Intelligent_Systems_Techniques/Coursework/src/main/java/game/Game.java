@@ -9,12 +9,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Game implements Cloneable {
-	ArrayList<Draught> draughtArrayList;
-	Colour currentTurn;
-	Draught selectedDraught;
-	boolean isCurrentMultiStepMove;
-	Colour gameWinner;
-	boolean isGameComplete;
+	private ArrayList<Draught> draughtArrayList;
+	private Colour currentTurn;
+	private Draught selectedDraught;
+	private boolean isCurrentMultiStepMove;
+	private Colour gameWinner;
+	private boolean isGameComplete;
 
 	public ArrayList<Draught> getDraughtArrayList() {
 		return draughtArrayList;
@@ -93,7 +93,7 @@ public class Game implements Cloneable {
 
 	}
 
-	public ArrayList<Move> removeNonCapturingMovesIfCapturingMoveExists(ArrayList<Move> moveList) {
+	private ArrayList<Move> removeNonCapturingMovesIfCapturingMoveExists(ArrayList<Move> moveList) {
 		ArrayList<Move> captureMoveList = moveList
 			.stream()
 			.filter(move -> move instanceof CapturingMove)
@@ -130,7 +130,7 @@ public class Game implements Cloneable {
 		return removeNonCapturingMovesIfCapturingMoveExists(possibleMoves);
 	}
 
-	public boolean isMoveBlocked(Move move) {
+	private boolean isMoveBlocked(Move move) {
 		for (Draught draught : draughtArrayList) {
 			if (draught.xPosition == move.getNewXPosition() && draught.yPosition == move.getNewYPosition()) {
 				return true;
@@ -185,7 +185,7 @@ public class Game implements Cloneable {
 		return draughtArrayList.stream().filter(draught -> draught.xPosition == x && draught.yPosition == y).findAny().get();
 	}
 
-	public Game successorFunction(Move move) {
+	public Game successor(Move move) {
 		Game rtnGame = this.clone();
 
 		rtnGame.selectMove(move);
