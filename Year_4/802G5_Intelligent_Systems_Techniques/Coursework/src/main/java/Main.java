@@ -16,7 +16,9 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import moves.Move;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Main extends Application {
 
@@ -45,7 +47,7 @@ public class Main extends Application {
 	public GridPane generateDisplay(GridPane root){
 		GridPane board = generateBoard();
 		board = displayDraughtsOnBoard(board);
-		if (game.getSelectedDraught() != null) {
+		if (game.getSelectedDraught() != null && game.getCurrentTurn() == Colour.DARK) {
 			board = displayPossibleMoves(board, game.getSelectedDraught());
 		}
 		root.add(board, 0, 0);
@@ -71,6 +73,14 @@ public class Main extends Application {
 			updateDisplay();
 		});
 		controlPanel.getChildren().add(updateValues);
+
+		Button competeAIMove = new Button("Complete AI Move");
+		competeAIMove.setOnMouseClicked(event -> {
+			game.selectMove(ai.selectMove(game));
+			updateDisplay();
+		});
+
+		controlPanel.getChildren().add(competeAIMove);
 		controlPanel.setAlignment(Pos.CENTER);
 		controlPanel.setSpacing(10);
 		return controlPanel;
@@ -139,7 +149,7 @@ public class Main extends Application {
 			draughtVisual.setFill(Color.WHITE);
 		}
 
-		if (game.draughtsWithPossibleMoves().contains(draught)) {
+		if (game.draughtsWithPossibleMoves().contains(draught) && draught.getColour() == Colour.DARK) {
 
 			// If draught has possible moves
 			rtnPane.setOnMouseClicked(event -> selectDraught(draught));
@@ -215,5 +225,18 @@ public class Main extends Application {
 			550)
 		);
 		primaryStage.show();
+		if (game.isGameComplete()) {
+			ButtonType reset = new ButtonType("Reset", ButtonBar.ButtonData.OTHER);
+			ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+			Alert alert = new Alert(Alert.AlertType.NONE, "The Game has come to a conclusion the winner is " + game.getGameWinner().toString(), reset, close);
+			alert.setTitle("Game Complete");
+			alert.setHeaderText("Game Complete");
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.orElse(close) == reset){
+				game.setUpNewGame();
+				updateDisplay();
+			}
+
+		}
 	}
 }

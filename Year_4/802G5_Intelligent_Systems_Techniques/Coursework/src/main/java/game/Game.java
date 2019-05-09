@@ -13,21 +13,15 @@ public class Game {
 	Colour currentTurn;
 	Draught selectedDraught;
 	boolean isCurrentMultiStepMove;
+	Colour gameWinner;
+	boolean isGameComplete;
 
 	public ArrayList<Draught> getDraughtArrayList() {
 		return draughtArrayList;
 	}
 
-	public void setDraughtArrayList(ArrayList<Draught> draughtArrayList) {
-		this.draughtArrayList = draughtArrayList;
-	}
-
 	public Colour getCurrentTurn() {
 		return currentTurn;
-	}
-
-	public void setCurrentTurn(Colour currentTurn) {
-		this.currentTurn = currentTurn;
 	}
 
 	public Draught getSelectedDraught() {
@@ -36,6 +30,25 @@ public class Game {
 
 	public void setSelectedDraught(Draught selectedDraught) {
 		this.selectedDraught = selectedDraught;
+	}
+
+	public Colour getGameWinner() {
+		return gameWinner;
+	}
+
+	public boolean isGameComplete() {
+		return isGameComplete;
+	}
+
+	public Game() {
+	}
+
+	public Game(Game game) {
+		draughtArrayList = game.draughtArrayList;
+		currentTurn = game.currentTurn;
+		selectedDraught = game.selectedDraught;
+		isCurrentMultiStepMove = game.isCurrentMultiStepMove;
+		isGameComplete = game.isGameComplete;
 	}
 
 	public void setUpNewGame() {
@@ -53,6 +66,7 @@ public class Game {
 		}
 		currentTurn = Colour.DARK;
 		isCurrentMultiStepMove = false;
+		isGameComplete = false;
 	}
 
 	public ArrayList<Move> findAllPossibleMoves() {
@@ -139,6 +153,7 @@ public class Game {
 				if (!move.getDraught().isDraughtOnKingsRow() || move.getDraught().isCrowned()) {
 					selectedDraught = move.getDraught();
 					isCurrentMultiStepMove = true;
+					checkForWinner();
 					return;
 				}
 			}
@@ -153,6 +168,38 @@ public class Game {
 		}
 		selectedDraught = null;
 		isCurrentMultiStepMove = false;
+		checkForWinner();
+	}
+
+	public Game successorFunction(Move move) {
+		Game rtnGame = new Game(this);
+
+		rtnGame.selectMove(move);
+		return rtnGame;
+	}
+
+	private boolean checkForWinner() {
+
+		if (draughtArrayList.stream().noneMatch(draught -> draught.getColour() == Colour.LIGHT)) {
+			isGameComplete = true;
+			gameWinner = Colour.DARK;
+			return true;
+		}
+		if (draughtArrayList.stream().noneMatch(draught -> draught.getColour() == Colour.DARK)) {
+			isGameComplete = true;
+			gameWinner = Colour.LIGHT;
+			return true;
+		}
+		if (findAllPossibleMoves().isEmpty()) {
+			isGameComplete = true;
+			if (currentTurn == Colour.LIGHT) {
+				gameWinner = Colour.DARK;
+			} else if (currentTurn == Colour.DARK) {
+				gameWinner = Colour.LIGHT;
+			}
+			return true;
+		}
+		return isGameComplete;
 	}
 
 
