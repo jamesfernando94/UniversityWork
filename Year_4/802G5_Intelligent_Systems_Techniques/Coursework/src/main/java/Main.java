@@ -60,7 +60,7 @@ public class Main extends Application {
 
 		VBox controlPanel = new VBox();
 		HBox aiDifficulty = new HBox();
-		Label aiDifficultyLabel = new Label("AI Difficulty Level (0-6): ");
+		Label aiDifficultyLabel = new Label("AI Difficulty Level (0-7): ");
 		TextField aiDifficultyTextField = new TextField(String.format("%d",ai.getDifficulty()));
 		aiDifficulty.getChildren().addAll(aiDifficultyLabel, aiDifficultyTextField);
 		controlPanel.getChildren().add(aiDifficulty);
@@ -69,7 +69,7 @@ public class Main extends Application {
 		updateValues.setOnMouseClicked(event -> {
 			String str = aiDifficultyTextField.getText();
 			int temp = Integer.parseInt(str);
-			ai.setDifficulty(temp > 6 ? 6 : temp);
+			ai.setDifficulty(temp > 7 ? 7 : temp);
 			updateDisplay();
 		});
 		controlPanel.getChildren().add(updateValues);
