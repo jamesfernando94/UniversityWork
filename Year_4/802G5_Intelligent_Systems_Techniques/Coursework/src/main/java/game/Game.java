@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Game {
+public class Game implements Cloneable {
 	ArrayList<Draught> draughtArrayList;
 	Colour currentTurn;
 	Draught selectedDraught;
@@ -44,7 +44,11 @@ public class Game {
 	}
 
 	public Game(Game game) {
-		draughtArrayList = game.draughtArrayList;
+		draughtArrayList = new ArrayList<>();
+		for (Draught draught : game.draughtArrayList) {
+			draughtArrayList.add(new Draught(draught));
+		}
+
 		currentTurn = game.currentTurn;
 		selectedDraught = game.selectedDraught;
 		isCurrentMultiStepMove = game.isCurrentMultiStepMove;
@@ -144,14 +148,20 @@ public class Game {
 	}
 
 	public void selectMove(Move move){
-		move.getDraught().setxPosition(move.getNewXPosition());
-		move.getDraught().setyPosition(move.getNewYPosition());
+		Draught moveDraught = getDraughtFromPosition(move.getDraught().xPosition, move.getDraught().yPosition);
+
+		moveDraught.setxPosition(move.getNewXPosition());
+		moveDraught.setyPosition(move.getNewYPosition());
+
 		if (move instanceof CapturingMove) {
-			draughtArrayList.remove(((CapturingMove) move).getCapturedDraught());
-			ArrayList<Move> moves = findPossibleMoves(move.getDraught());
+
+			Draught capturedDraught = getDraughtFromPosition(((CapturingMove) move).getCapturedDraught().getxPosition(), ((CapturingMove) move).getCapturedDraught().getyPosition());
+			draughtArrayList.remove(capturedDraught);
+
+			ArrayList<Move> moves = findPossibleMoves(moveDraught);
 			if (moves.stream().anyMatch(move1 -> move1 instanceof CapturingMove)) {
-				if (!move.getDraught().isDraughtOnKingsRow() || move.getDraught().isCrowned()) {
-					selectedDraught = move.getDraught();
+				if (!moveDraught.isDraughtOnKingsRow() || moveDraught.isCrowned()) {
+					selectedDraught = moveDraught;
 					isCurrentMultiStepMove = true;
 					checkForWinner();
 					return;
@@ -159,7 +169,7 @@ public class Game {
 			}
 
 		}
-		move.getDraught().crownDraughtIfPossible();
+		moveDraught.crownDraughtIfPossible();
 
 		if (currentTurn == Colour.DARK){
 			currentTurn = Colour.LIGHT;
@@ -171,8 +181,12 @@ public class Game {
 		checkForWinner();
 	}
 
+	private Draught getDraughtFromPosition(int x, int y) {
+		return draughtArrayList.stream().filter(draught -> draught.xPosition == x && draught.yPosition == y).findAny().get();
+	}
+
 	public Game successorFunction(Move move) {
-		Game rtnGame = new Game(this);
+		Game rtnGame = this.clone();
 
 		rtnGame.selectMove(move);
 		return rtnGame;
@@ -205,6 +219,24 @@ public class Game {
 
 	public boolean isCurrentMultiStepMove() {
 		return isCurrentMultiStepMove;
+	}
+
+	@Override
+	protected Game clone() {
+		Game clone = null;
+		try {
+			clone = (Game) super.clone();
+			clone.draughtArrayList = new ArrayList<>();
+			for (Draught draught : draughtArrayList) {
+				clone.draughtArrayList.add(draught.clone());
+			}
+			clone.isGameComplete = isGameComplete;
+			clone.gameWinner = gameWinner;
+			clone.currentTurn = currentTurn;
+			clone.isCurrentMultiStepMove = isCurrentMultiStepMove;
+			clone.selectedDraught = selectedDraught == null ? null : selectedDraught.clone();
+		} catch (CloneNotSupportedException ignored) {}
+		return clone;
 	}
 
 }

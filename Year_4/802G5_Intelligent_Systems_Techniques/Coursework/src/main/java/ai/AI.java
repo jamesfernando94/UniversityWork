@@ -8,6 +8,7 @@ import moves.Move;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class AI {
 
@@ -38,21 +39,47 @@ public class AI {
 	}
 
 	public Move selectMove(Game game) {
-		return selectMove(game.findAllPossibleMoves());
+		ArrayList<Pair<Integer, Move>> evaluatedMoves = evaluateMoves(game);
+		evaluatedMoves.sort((lhs, rhs) -> lhs.getKey() > rhs.getKey() ? -1 : (lhs.getKey() < rhs.getKey()) ? 1 : 0);
+		return evaluatedMoves.get(0).getValue();
 	}
 
-	private Move selectMove(ArrayList<Move> moves){return moves.get(random.nextInt(moves.size()));}
 
-	public ArrayList<Pair<Integer, Move>> evaluateMoves(Game game, ArrayList<Move> moves){
+	public ArrayList<Pair<Integer, Move>> evaluateMoves(Game game){
 		ArrayList<Pair<Integer, Move>> evaluatedMoves =  new ArrayList<>();
 
-		for (Move move : moves)
+		for (Move move : game.findAllPossibleMoves())
 		{
 			Game futureGame = game.successorFunction(move);
-			evaluatedMoves.add(new Pair<>(evaluateGameBoard(futureGame), move));
+			evaluatedMoves.add(new Pair<>(minimax(futureGame, difficulty, false), move));
 		}
 
 		return evaluatedMoves;
+	}
+
+	private int minimax(Game gameBoard,int depth,boolean maxPlayer){
+		if (depth == 0 || gameBoard.isGameComplete())
+		{
+			return evaluateGameBoard(gameBoard);
+		}
+		if (maxPlayer){
+			int bestVal = Integer.MIN_VALUE;
+			ArrayList<Game> children = gameBoard.findAllPossibleMoves().stream().map(gameBoard::successorFunction).collect(Collectors.toCollection(ArrayList::new));
+			for (Game game : children){
+				int evaluation = minimax(game, depth-1, false);
+				bestVal = Math.max(bestVal, evaluation);
+			}
+			return bestVal;
+		}else{
+			int bestVal = Integer.MAX_VALUE;
+			ArrayList<Game> children = gameBoard.findAllPossibleMoves().stream().map(gameBoard::successorFunction).collect(Collectors.toCollection(ArrayList::new));
+			for (Game game: children){
+				int evaluation = minimax(game, depth-1, true);
+				bestVal = Math.min(bestVal, evaluation);
+			}
+			return bestVal;
+		}
+
 	}
 
 

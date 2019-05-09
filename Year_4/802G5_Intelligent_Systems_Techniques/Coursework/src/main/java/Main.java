@@ -16,7 +16,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import moves.Move;
 
-import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -34,7 +33,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		game = new Game();
 		game.setUpNewGame();
-		ai = new AI(50, Colour.LIGHT);
+		ai = new AI(2, Colour.LIGHT);
 		this.primaryStage = primaryStage;
 		updateDisplay();
 	}
@@ -60,7 +59,7 @@ public class Main extends Application {
 
 		VBox controlPanel = new VBox();
 		HBox aiDifficulty = new HBox();
-		Label aiDifficultyLabel = new Label("AI Difficulty Level (0-99): ");
+		Label aiDifficultyLabel = new Label("AI Difficulty Level (0-6): ");
 		TextField aiDifficultyTextField = new TextField(String.format("%d",ai.getDifficulty()));
 		aiDifficulty.getChildren().addAll(aiDifficultyLabel, aiDifficultyTextField);
 		controlPanel.getChildren().add(aiDifficulty);
@@ -69,15 +68,17 @@ public class Main extends Application {
 		updateValues.setOnMouseClicked(event -> {
 			String str = aiDifficultyTextField.getText();
 			int temp = Integer.parseInt(str);
-			ai.setDifficulty(temp);
+			ai.setDifficulty(temp > 6 ? 6 : temp);
 			updateDisplay();
 		});
 		controlPanel.getChildren().add(updateValues);
 
 		Button competeAIMove = new Button("Complete AI Move");
 		competeAIMove.setOnMouseClicked(event -> {
-			game.selectMove(ai.selectMove(game));
-			updateDisplay();
+			if (game.getCurrentTurn() == Colour.LIGHT) {
+				game.selectMove(ai.selectMove(game));
+				updateDisplay();
+			}
 		});
 
 		controlPanel.getChildren().add(competeAIMove);

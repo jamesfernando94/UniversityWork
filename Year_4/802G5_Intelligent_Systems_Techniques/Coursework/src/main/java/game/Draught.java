@@ -5,8 +5,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 
-public class Draught {
+public class Draught implements Cloneable{
 	int xPosition;
+	int yPosition;
+	boolean crowned;
+	Colour colour;
+
 
 	public int getxPosition() {
 		return xPosition;
@@ -40,19 +44,14 @@ public class Draught {
 		this.colour = colour;
 	}
 
-	public boolean isTaken() {
-		return taken;
+
+
+	public Draught(Draught draught) {
+		xPosition = draught.xPosition;
+		yPosition = draught.yPosition;
+		crowned = draught.crowned;
+		colour = draught.colour;
 	}
-
-	public void setTaken(boolean taken) {
-		this.taken = taken;
-	}
-
-	int yPosition;
-	boolean crowned;
-	Colour colour;
-	boolean taken;
-
 
 	public Draught(int xPosition, int yPosition, Colour colour)
 	{
@@ -60,7 +59,6 @@ public class Draught {
 		this.yPosition = yPosition;
 		crowned = false;
 		this.colour = colour;
-		taken = false;
 	}
 
 	public ArrayList<Move> listPossibleMoves() {
@@ -96,5 +94,21 @@ public class Draught {
 
 	public boolean isDraughtOnKingsRow() {
 		return colour.equals(Colour.LIGHT) ? yPosition == 0 : yPosition == 7;
+	}
+
+	@Override
+	protected Draught clone(){
+		Draught clone = null;
+		try {
+			clone = (Draught) super.clone();
+			clone.colour = getColour();
+			clone.crowned = crowned;
+			clone.xPosition = xPosition;
+			clone.yPosition = yPosition;
+
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return clone;
 	}
 }
