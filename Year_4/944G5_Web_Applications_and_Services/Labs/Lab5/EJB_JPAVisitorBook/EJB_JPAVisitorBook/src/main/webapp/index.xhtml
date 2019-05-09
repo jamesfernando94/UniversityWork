@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Visitors' Book</title>
+    </h:head>
+    <h:body>
+        Please enter your name, date of visit and comment about your recent visit.
+        <h:form id="comments_form" title="Comments' Form" >
+            Full Name: <h:inputText id="full_name" label="Full Name" maxlength="5" required="true" requiredMessage="Please enter your full name" title="Full Name" value="#{visitorBean.name}"/>
+            <h:message for="full_name" title="Full Name"/>
+            <br/>
+            Date of Visit: <h:inputText id="date_of_visit" label="Date of Visit" maxlength="20" required="true" requiredMessage="Please enter the date of your visit" title="Date of Visit" value="#{visitorBean.visitDate}">
+                <f:converter converterId="multiDateConverter"/>
+                <f:attribute name="pattern1" value="dd/MM/yyyy" />
+                <f:attribute name="pattern2" value="dd-MM-yyyy" />
+            </h:inputText>
+            <h:message for="date_of_visit" title="Date of Visit"/>
+            <br/>
+            Comment: <h:inputTextarea id="comment" label="Comment" required="true" requiredMessage="Please enter your comment" title="Comment" value="#{visitorBean.comment_str}">
+                <f:validateLength maximum="255" />
+            </h:inputTextarea>
+            <h:message for="comment" title="Comment"/>
+            <br/>
+            <h:commandButton id="submit_form" title="Submit Form" label="Submit Form" type="submit" value="Submit Form" action="#{visitorBean.mySubmit()}" />
+            <h:commandButton id="reset_form" title="Reset Form" label="Reset Form" type="reset" value="Reset Form" />
+            
+        </h:form>
+    </h:body>
+</html>
+

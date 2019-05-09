@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Comments</title>
+    </h:head>
+    <h:body>
+        Full Name: <h:outputText id="full_name" title="Full Name" value="#{visitorBean.name}"/>
+        <br/>
+        Date of Visit: <h:outputText id="date_of_visit" title="Date of Visit" value="#{visitorBean.visitDate}"/>
+        <br/>
+        Comment: <h:outputText id="comment" title="Comment" value="#{visitorBean.comment_str}"/>
+        <br/>
+
+        <h:dataTable value="#{visitorBean.commentList}" var="comment">
+            <h:column>    				
+                <f:facet name="header">Name</f:facet>    				
+                    #{comment.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Date of Visit</f:facet>
+                    #{comment.visitDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Comment</f:facet>
+                    #{comment.comment_str}
+            </h:column>
+        </h:dataTable>
+
+
+        <h:button id="alt_back_button" title="Go Back" value="Go Back" outcome="index"/>
+    </h:body>
+</html>

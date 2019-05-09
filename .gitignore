@@ -21,3 +21,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab1/HttpServer/nbproject/private/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab1/HttpServer/build/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab2/ServerletCommentStore/target/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab3/JSFVisitorBook/target/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab5/EJB_JPAVisitorBook/EJB_JPAVisitorBook/target/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab6/SecurityExercise1/target/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab6/SecurityExercise2/target/
+/Year_4/944G5_Web_Applications_and_Services/Labs/Lab7/transactions/target/

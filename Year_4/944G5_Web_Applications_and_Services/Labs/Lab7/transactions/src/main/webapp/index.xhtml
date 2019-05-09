@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Transaction Exercise</title>
+    </h:head>
+    <h:body>
+        <h1> The Transaction Simulation Exercise</h1>
+        <p> Refresh your memory on the slides on lost updates and inconsistent retrievals in the first transaction lecture.  Below, you can write your own sequence of read and write operations, simulating different transactions by using different tabs on your browser (cf ConversationScoped on the managed bean).</p>
+        <p> In the input field below, you can write a sequence of operations to act on the records held within the database.  The records are labelled 'x' and 'y', and take integer values.
+            <ul>
+                <li>
+                    <code>read(x);</code> which will read the current value held in record x.  Note the semicolon.  You can abbreviate <code> read</code> to <code> r</code>.
+                </li>
+                <li>
+                    <code>write(y,2);</code> writes the value 2 into record y, again with <code>w</code> abbreviation.    
+                </li>
+                <li> 
+                    <code>delay(5);</code> which delays the operations by 5 seconds. Abbreviations also work.
+                </li>
+            </ul>
+            Try our various sequences to see what happens.  If the input sequence is parsed correctly, a reflected rewrite is shown, which can then be passed to the EJB to execute with the execute button.  If the sequence is unparseable, a rather terse error message is returned.
+        </p>
+        
+        <h:form>
+            <p>Enter the sequence of operations: </p>
+            <h:inputText value="#{exerciseBean.operationString}" size="80"/>
+            <h:commandButton value="submit"/>
+            <br/>
+            <h:outputText value="#{exerciseBean.parseOutput}"/>
+            <h:commandButton value="Execute" action="#{exerciseBean.execute()}"/>
+            <br/>
+            <h:outputText value="#{exerciseBean.results}"/>
+        </h:form>
+
+
+    </h:body>
+</html>
+
