@@ -1,0 +1,37 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.jamesfernando.webappscoursework.ejbs;
+
+import com.jamesfernando.webappscoursework.entitys.Project;
+import com.jamesfernando.webappscoursework.entitys.ProjectTopic;
+import java.util.Collection;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ *
+ * @author James
+ */
+@Stateless
+public class ProjectTopicStorageServiceBean implements ProjectTopicStorageService {
+
+    @PersistenceContext
+    EntityManager em;
+    
+    @Override
+    public List<ProjectTopic> getProjectTopicsList() {
+        return em.createNamedQuery("findAllProjectTopics").getResultList();
+    }
+
+    @Override
+    public void insertProjectTopic(String title, String description, Collection<Project> projects) {
+        ProjectTopic projectTopic = new ProjectTopic(title, description, projects);
+        em.persist(projectTopic);
+    }
+
+}
