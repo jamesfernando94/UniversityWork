@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 
+
 @NamedQuery(name = "findAllProjects", query = "SELECT p FROM Project p")
 /**
  *
@@ -39,12 +40,12 @@ public class Project implements Serializable {
     private String requiredSkills;
     @NotNull
     private ProjectStatus status;
-    @JoinTable(name = "PROJECT_PROJECTTOPICS", joinColumns = @JoinColumn(name = "PROJECT_ID"),inverseJoinColumns = @JoinColumn(name = "PROJECT_TOPIC_ID"))
+    @JoinTable(name = "PROJECT_PROJECTTOPICS", joinColumns = @JoinColumn(name = "PROJECT_ID"), inverseJoinColumns = @JoinColumn(name = "PROJECT_TOPIC_ID"))
     @ManyToMany
     private Collection<ProjectTopic> projectTopics;
     @ManyToOne
     private Supervisor supervisor;
-    
+
     public Project() {
     }
 
@@ -166,11 +167,5 @@ public class Project implements Serializable {
     public String toString() {
         return "Project{" + "id=" + id + ", title=" + title + ", description=" + description + ", requiredSkills=" + requiredSkills + ", status=" + status + ", projectTopics=" + projectTopics + ", supervisor=" + supervisor + '}';
     }
-    
-    
-
-    
-
-
 
 }
