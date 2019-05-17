@@ -5,8 +5,8 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entitys.Project;
-import com.jamesfernando.webappscoursework.entitys.Student;
+import com.jamesfernando.webappscoursework.entities.Project;
+import com.jamesfernando.webappscoursework.entities.Student;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -19,5 +19,7 @@ public interface StudentStorageService {
 
     public List<Student> getStudentList();
 
-    public void insertStudent( String sussexId, String password, String name, String surname, String emailAddress, String course, Project project);
+    public void insertStudent( String sussexId, String password, String name, String surname, String emailAddress, String course);
+
+    public void updateStudent(Student student);
 }

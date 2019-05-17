@@ -5,10 +5,10 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entitys.Project;
-import com.jamesfernando.webappscoursework.entitys.ProjectStatus;
-import com.jamesfernando.webappscoursework.entitys.ProjectTopic;
-import com.jamesfernando.webappscoursework.entitys.Supervisor;
+import com.jamesfernando.webappscoursework.entities.Project;
+import com.jamesfernando.webappscoursework.entities.ProjectStatus;
+import com.jamesfernando.webappscoursework.entities.ProjectTopic;
+import com.jamesfernando.webappscoursework.entities.Supervisor;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -36,5 +36,14 @@ public class ProjectStorageServiceBean implements ProjectStorageService {
         em.persist(project);
     }
 
+    @Override
+    public void insertProject(Project project) {
+        em.persist(project);
+    }
+
+    @Override
+    public void updateProject(Project project) {
+        em.merge(project);
+    }
 
 }

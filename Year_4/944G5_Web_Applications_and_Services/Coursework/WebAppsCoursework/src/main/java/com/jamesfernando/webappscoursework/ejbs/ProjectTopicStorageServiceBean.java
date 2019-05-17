@@ -5,9 +5,7 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entitys.Project;
-import com.jamesfernando.webappscoursework.entitys.ProjectTopic;
-import java.util.Collection;
+import com.jamesfernando.webappscoursework.entities.ProjectTopic;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -24,13 +22,13 @@ public class ProjectTopicStorageServiceBean implements ProjectTopicStorageServic
     EntityManager em;
     
     @Override
-    public List<ProjectTopic> getProjectTopicsList() {
+    public synchronized List<ProjectTopic> getProjectTopicsList() {
         return em.createNamedQuery("findAllProjectTopics").getResultList();
     }
 
     @Override
-    public void insertProjectTopic(String title, String description, Collection<Project> projects) {
-        ProjectTopic projectTopic = new ProjectTopic(title, description, projects);
+    public synchronized void insertProjectTopic(String title, String description) {
+        ProjectTopic projectTopic = new ProjectTopic(title, description);
         em.persist(projectTopic);
     }
 

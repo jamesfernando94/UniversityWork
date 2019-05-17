@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Student Registration</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            Fill in the details and press the register button.
+            <br/>
+            <h:outputLabel for="sussexId" value="*Sussex ID:"/>
+            <h:inputText id ="sussexId" value="#{studentRegistrationBean.sussexId}" title="Enter sussex ID" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="sussexId"/>
+            <br/>
+            <h:outputLabel for="password" value="*Password:"/>
+            <h:inputSecret id ="password" value="#{studentRegistrationBean.password}" title="Enter password" label="password" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="password"/>
+            <br/>
+            <h:outputLabel for="name" value="*First Name: "/>
+            <h:inputText id ="name" value="#{studentRegistrationBean.name}" title="Enter name" required="true" label="name" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="name"/>
+            <br/>
+            <h:outputLabel for="surname" value="*Last Name"/>
+            <h:inputText id ="surname" value="#{studentRegistrationBean.surname}" title="Enter surname" label="surname" required="true"  requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="surname"/>
+            <br/>
+            <h:outputLabel for="emailAddress" value="*Email Address"/>
+            <h:inputText id ="emailAddress" value="#{studentRegistrationBean.emailAddress}" title="Enter email address" label="email" required="true"  requiredMessage="Mandatory Field" validatorMessage="Invalid email address format">
+                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
+            </h:inputText>&nbsp; 
+            <h:message style="color:red" for="emailAddress"/>
+            <br/>
+            <h:outputLabel for="course" value="*Course"/>
+            <h:inputText id ="course" value="#{studentRegistrationBean.course}" title="Enter Course Title" label="course" required="true"  requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="course"/>
+            <br/>
+            <h:commandButton id="register" type="submit" value="Register" action="#{studentRegistrationBean.register}" title="Register Student"/>
+            <h:commandButton id="reset" type="reset" value="Reset Form" title="Reset Form"/>
+        </h:form>
+    </h:body>
+</html>
+

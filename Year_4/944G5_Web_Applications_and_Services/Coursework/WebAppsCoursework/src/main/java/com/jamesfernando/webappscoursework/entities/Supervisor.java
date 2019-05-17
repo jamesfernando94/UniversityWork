@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jamesfernando.webappscoursework.entitys;
+package com.jamesfernando.webappscoursework.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -40,6 +40,11 @@ public class Supervisor extends SystemUser implements Serializable {
         this.department = department;
         this.telephoneNumber = telephoneNumber;
         this.projects = projects;
+    }
+    public Supervisor(String sussexId, String password, String name, String surname, String emailAddress, String department, String telephoneNumber) {
+        super(sussexId, password, name, surname, emailAddress);
+        this.department = department;
+        this.telephoneNumber = telephoneNumber;
     }
 
     public String getDepartment() {

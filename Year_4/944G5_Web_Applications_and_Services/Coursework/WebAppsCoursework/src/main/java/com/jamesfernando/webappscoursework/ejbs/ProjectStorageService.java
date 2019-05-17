@@ -5,11 +5,11 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entitys.Project;
+import com.jamesfernando.webappscoursework.entities.Project;
 import javax.ejb.Local;
-import com.jamesfernando.webappscoursework.entitys.ProjectStatus;
-import com.jamesfernando.webappscoursework.entitys.ProjectTopic;
-import com.jamesfernando.webappscoursework.entitys.Supervisor;
+import com.jamesfernando.webappscoursework.entities.ProjectStatus;
+import com.jamesfernando.webappscoursework.entities.ProjectTopic;
+import com.jamesfernando.webappscoursework.entities.Supervisor;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,4 +23,7 @@ public interface ProjectStorageService {
     public List<Project> getProjectList();
 
     public void insertProject(String title, String description, String requiredSkills, ProjectStatus status, Collection<ProjectTopic> projectTopics, Supervisor supervisor);
+    public void insertProject(Project project);
+    public void updateProject(Project project);
+    
 }

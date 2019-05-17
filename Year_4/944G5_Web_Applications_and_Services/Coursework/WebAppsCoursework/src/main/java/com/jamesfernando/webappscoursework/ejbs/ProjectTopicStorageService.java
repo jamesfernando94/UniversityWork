@@ -5,8 +5,8 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entitys.Project;
-import com.jamesfernando.webappscoursework.entitys.ProjectTopic;
+import com.jamesfernando.webappscoursework.entities.Project;
+import com.jamesfernando.webappscoursework.entities.ProjectTopic;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.Local;
@@ -19,5 +19,5 @@ import javax.ejb.Local;
 public interface ProjectTopicStorageService {
     public List<ProjectTopic> getProjectTopicsList();
     
-    public void insertProjectTopic(String title, String description, Collection<Project> projects);
+    public void insertProjectTopic(String title, String description);
 }

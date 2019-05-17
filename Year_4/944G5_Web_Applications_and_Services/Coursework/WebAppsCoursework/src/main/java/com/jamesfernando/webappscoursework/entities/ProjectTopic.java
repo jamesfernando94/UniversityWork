@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jamesfernando.webappscoursework.entitys;
+package com.jamesfernando.webappscoursework.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
@@ -38,6 +37,10 @@ public class ProjectTopic implements Serializable {
     private Collection<Project> projects;
 
     public ProjectTopic() {
+    }
+        public ProjectTopic(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public ProjectTopic(String title, String description, Collection<Project> projects) {

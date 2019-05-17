@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>List of your Students</title>
+    </h:head>
+    <h:body>
+         <table>
+            <tr>
+                <th>Sussex ID</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email Address</th>
+                <th>Course</th>
+            </tr>
+             <ui:repeat var="student" value="#{supervisorStudentsBean.supervisorStudentList}">
+                <tr>
+                    <td>#{student.sussexId}</td>
+                    <td>#{student.name}</td>
+                    <td>#{student.surname}</td>
+                    <td>#{student.emailAddress}</td>
+                    <td>#{student.course}</td>
+                </tr>
+            </ui:repeat>
+        </table>
+        <h:button value="Home" outcome="index"/>    
+    </h:body>
+</html>
+

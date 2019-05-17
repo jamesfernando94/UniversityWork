@@ -5,7 +5,7 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entitys.SystemUserGroup;
+import com.jamesfernando.webappscoursework.entities.SystemUserGroup;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,12 +22,12 @@ public class SystemUserGroupStorageServiceBean implements SystemUserGroupStorage
     EntityManager em;
     
     @Override
-    public List<SystemUserGroup> getSystemUserGroupList() {
+    public synchronized List<SystemUserGroup> getSystemUserGroupList() {
         return em.createNamedQuery("findAllSystemUserGroups").getResultList();
     }
 
     @Override
-    public void insertSystemUserGroup(String sussexId, String groupName) {
+    public synchronized void insertSystemUserGroup(String sussexId, String groupName) {
         SystemUserGroup systemUserGroup = new SystemUserGroup(sussexId, groupName);
         em.persist(systemUserGroup);
     }

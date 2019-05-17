@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Register Project Topic</title>
+    </h:head>
+    <h:body>
+   <h:form>
+            Fill in the details and press the register button.
+            <br/>
+            <h:outputLabel for="topicTitle" value="*Topic Title:"/>
+            <h:inputText id ="topicTitle" value="#{projectTopicRegistrationBean.topicTitle}" title="Enter Topic Title" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="topicTitle"/>
+            <br/>
+            <h:outputLabel for="topicDescription" value="*Description:"/>
+            <h:inputText id ="topicDescription" value="#{projectTopicRegistrationBean.topicDescription}" title="Enter Topic Description" label="topicDescription" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="topicDescription"/>
+            <br/>
+            <h:commandButton id="register" type="submit" value="Register" action="#{projectTopicRegistrationBean.register}" title="Register Project"/>
+            <h:commandButton id="reset" type="reset" value="Reset Form" title="Reset Form"/>
+        </h:form>    </h:body>
+</html>
+

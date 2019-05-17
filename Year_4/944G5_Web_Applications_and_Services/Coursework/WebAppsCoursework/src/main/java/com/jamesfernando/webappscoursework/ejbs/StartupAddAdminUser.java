@@ -5,8 +5,6 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entities.SystemUserGroup;
-import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -14,8 +12,8 @@ import javax.ejb.Local;
  * @author James
  */
 @Local
-public interface SystemUserGroupStorageService {
-        public List<SystemUserGroup> getSystemUserGroupList();
-
-    public void insertSystemUserGroup(String sussexId, String groupName);
+public interface StartupAddAdminUser {
+    
+    public void Initialise();
+    
 }

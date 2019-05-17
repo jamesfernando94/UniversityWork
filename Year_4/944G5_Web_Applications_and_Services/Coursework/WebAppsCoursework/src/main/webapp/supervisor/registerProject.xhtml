@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Register Project</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            Fill in the details and press the register button.
+            <br/>
+            <h:outputLabel for="title" value="*Title:"/>
+            <h:inputText id ="title" value="#{projectRegistrationBean.title}" title="Enter Title" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="title"/>
+            <br/>
+            <h:outputLabel for="description" value="*Description:"/>
+            <h:inputText id ="description" value="#{projectRegistrationBean.description}" title="Enter description" label="description" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="description"/>
+            <br/>
+            <h:outputLabel for="requiredSkills" value="*Required Skills: "/>
+            <h:inputText id ="requiredSkills" value="#{projectRegistrationBean.requiredSkills}" title="Enter Required Skills" required="true" label="requiredSkills" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="requiredSkills"/>
+            <br/>
+
+            <h:commandButton id="register" type="submit" value="Register" action="#{projectRegistrationBean.register}" title="Register Project"/>
+            <h:commandButton id="reset" type="reset" value="Reset Form" title="Reset Form"/>
+        </h:form>
+    </h:body>
+</html>
+

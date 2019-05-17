@@ -5,43 +5,44 @@
  */
 package com.jamesfernando.webappscoursework.ejbs;
 
-import com.jamesfernando.webappscoursework.entities.Project;
-import com.jamesfernando.webappscoursework.entities.Student;
 import com.jamesfernando.webappscoursework.entities.SystemUser;
 import com.jamesfernando.webappscoursework.entities.SystemUserGroup;
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.Stateless;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author James
  */
-@Stateless
-public class StudentStorageServiceBean implements StudentStorageService {
+@Startup
+@Singleton
+public class StartupAddAdminUserBean implements StartupAddAdminUser {
 
-  @PersistenceContext
+    @PersistenceContext
     EntityManager em;
-    
-    @Override
-    public synchronized List<Student> getStudentList() {
-        return em.createNamedQuery("findAllStudents").getResultList();
-    }
 
     @Override
-    public synchronized void insertStudent( String sussexId, String password, String name, String surname, String emailAddress, String course) {
-         try {
-            Student student;
+    @PostConstruct
+    public void Initialise() {
+        if (em.createNamedQuery("findAllSystemUsers").getResultList().stream().anyMatch(user -> "admin1".equals(((SystemUser)user).getSussexId()))) {
+            return;
+        }
+        try {
+            SystemUser sys_user;
             SystemUserGroup sys_user_group;
 
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(password.getBytes("UTF-8"));
+            String passwd = "admin1";
+            md.update(passwd.getBytes("UTF-8"));
             byte[] digest = md.digest();
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < digest.length; i++) {
@@ -51,10 +52,10 @@ public class StudentStorageServiceBean implements StudentStorageService {
 
             // apart from the default constructor which is required by JPA
             // you need to also implement a constructor that will make the following code succeed
-            student = new Student(sussexId, paswdToStoreInDB, name, surname, emailAddress, course);
-            sys_user_group = new SystemUserGroup(sussexId, "Student");
+            sys_user = new SystemUser("admin1", paswdToStoreInDB, "admin", "admin", "admin@admin.com");
+            sys_user_group = new SystemUserGroup("admin1", "Administrator");
 
-            em.persist(student);
+            em.persist(sys_user);
             em.persist(sys_user_group);
 
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
@@ -62,10 +63,4 @@ public class StudentStorageServiceBean implements StudentStorageService {
         }
     }
 
-    @Override
-    public void updateStudent(Student student) {
-        em.merge(student);
-    }
-    
-    
 }

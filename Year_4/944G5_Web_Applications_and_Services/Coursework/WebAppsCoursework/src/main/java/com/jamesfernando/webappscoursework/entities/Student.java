@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jamesfernando.webappscoursework.entitys;
+package com.jamesfernando.webappscoursework.entities;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -35,6 +35,11 @@ public class Student extends SystemUser implements Serializable {
         super(sussexId, password, name, surname, emailAddress);
         this.course = course;
         this.project = project;
+    }
+
+    public Student(String sussexId, String password, String name, String surname, String emailAddress, String course) {
+        super(sussexId, password, name, surname, emailAddress);
+        this.course = course;
     }
 
     public String getCourse() {
