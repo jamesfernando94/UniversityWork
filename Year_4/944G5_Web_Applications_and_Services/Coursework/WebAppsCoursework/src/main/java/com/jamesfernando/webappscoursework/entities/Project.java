@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 @NamedQuery(name = "findAllProjects", query = "SELECT p FROM Project p")
@@ -44,6 +45,7 @@ public class Project implements Serializable {
     @ManyToMany
     private Collection<ProjectTopic> projectTopics;
     @ManyToOne
+    @JsonIgnore
     private Supervisor supervisor;
 
     public Project() {
