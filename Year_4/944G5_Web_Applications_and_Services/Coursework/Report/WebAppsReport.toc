@@ -5,3 +5,5 @@
 \contentsline {section}{\numberline {2}Securing the Application}{3}{section.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Extending Design to Avoid a Single Point of failure}{3}{section.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4}Concurrency}{4}{section.4}
